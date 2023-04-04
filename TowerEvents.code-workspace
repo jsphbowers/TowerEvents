@@ -1,4 +1,3 @@
-
 {
   "folders": [
     {
@@ -40,6 +39,29 @@
     },
     "[vue]": {
       "editor.defaultFormatter": "Vue.volar"
-    }
+    },
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#e8e36d",
+      "activityBar.background": "#e8e36d",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#1aa5a0",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "commandCenter.border": "#15202b99",
+      "panel.border": "#e8e36d",
+      "sash.hoverBorder": "#e8e36d",
+      "statusBar.background": "#e1db41",
+      "statusBar.debuggingBackground": "#4147e1",
+      "statusBar.debuggingForeground": "#e7e7e7",
+      "statusBar.foreground": "#15202b",
+      "statusBarItem.hoverBackground": "#cec821",
+      "statusBarItem.remoteBackground": "#e1db41",
+      "statusBarItem.remoteForeground": "#15202b",
+      "titleBar.activeBackground": "#e1db41",
+      "titleBar.activeForeground": "#15202b",
+      "titleBar.inactiveBackground": "#e1db4199",
+      "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#e1db41"
   }
 }
