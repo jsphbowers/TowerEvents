@@ -6,8 +6,9 @@ export class TowerEventsController extends BaseController {
   constructor() {
     super('api/events')
     this.router
-      .get('', this.getAll)
+
       .use(Auth0Provider.getAuthorizedUserInfo)
+      .post('', this.create)
   }
 
   async create(req, res, next) {
