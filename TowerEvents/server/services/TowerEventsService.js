@@ -32,6 +32,10 @@ class TowerEventsService {
   async editEvent(towerEventEdits, towerEventId) {
     let originalTowerEvent = await this.getTowerEvent(towerEventId)
 
+    if (towerEventEdits.userId != originalTowerEvent.creatorId) {
+      throw new BadRequest('You cannot edit other users events.')
+    }
+
     if (!originalTowerEvent) {
       throw new BadRequest('There is no tower with the provided credentials. Try again.')
     }
@@ -60,7 +64,7 @@ class TowerEventsService {
       throw new BadRequest('There is no tower with the provided credentials. Try again.')
     }
     if (originalTowerEvent.creatorId != userId) {
-      throw new UnAuthorized(`You are not the creator of ${originalTowerEvent.name}, be gone long one!`)
+      throw new Forbidden(`You are not the creator of ${originalTowerEvent.name}, be gone long one!`)
     }
     if (originalTowerEvent.isCanceled == true) {
       throw new Forbidden(`${originalTowerEvent.name} has already been canceled.`)

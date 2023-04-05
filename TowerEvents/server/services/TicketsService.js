@@ -34,6 +34,10 @@ class TicketsService {
       throw new BadRequest('Something went wrong')
     }
 
+    if (towerEvent.capacity == 0) {
+      throw new BadRequest('There is no capacity left for this event.')
+    }
+
     let ticket = await dbContext.Tickets.create(ticketData)
     await ticket.populate('event')
     await ticket.populate('profile')
