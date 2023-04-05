@@ -2,6 +2,11 @@ import { dbContext } from "../db/DbContext.js";
 import { BadRequest, Forbidden, UnAuthorized } from "../utils/Errors.js";
 
 class TowerEventsService {
+  async getMyTickets(accountId) {
+    let tickets = await dbContext.Tickets.find({ accountId })
+      .populate('event')
+    return tickets
+  }
   // GET ONE EVENT OR MANY
   async getTowerEvent(towerEventId) {
     let towerEvent = await dbContext.TowerEvents.findById(towerEventId)
