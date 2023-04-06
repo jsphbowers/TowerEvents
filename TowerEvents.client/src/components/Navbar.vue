@@ -12,7 +12,9 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <li>
-
+          <button v-if="account.id" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#towerEventModal">Host
+            Event
+            +</button>
         </li>
       </ul>
       <!-- LOGIN COMPONENT HERE -->
@@ -22,10 +24,14 @@
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
 import Login from './Login.vue'
+import { AppState } from "../AppState.js";
 export default {
   setup() {
-    return {}
+    return {
+      account: computed(() => AppState.account)
+    }
   },
   components: { Login }
 }

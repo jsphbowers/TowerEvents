@@ -12,8 +12,9 @@
     <div class="col-12 my-4">
       <section class="row">
         <div class="d-flex justify-content-evenly">
-          <button class="btn btn-outline-primary">All</button>
-          <button class="btn btn-outline-primary" v-for="c in categories">{{ c.toUpperCase() }}</button>
+          <button class="btn btn-outline-primary" @click="changeFilterCategory('')">All</button>
+          <button class="btn btn-outline-primary" @click="changeFilterCategory(c)" v-for="c in categories">{{
+            c.toUpperCase() }}</button>
         </div>
       </section>
     </div>
@@ -21,8 +22,8 @@
     <!-- SECTION Events Listed -->
     <div class="col-12">
       <section class="row">
-        <div class="col-md-4 text-light" v-for="e in towerEvents">
-          {{ towerEvents }}
+        <div class="col-md-4 text-light p-2" v-for="e in towerEvents" :key="e.id">
+          <TowerEventCard :towerEvent="e" />
         </div>
       </section>
 
@@ -37,35 +38,39 @@ import { logger } from "../utils/Logger.js";
 import { towerEventsService } from "../services/TowerEventsService.js"
 import { computed } from "@vue/reactivity";
 import { AppState } from "../AppState.js";
+import TowerEventCard from "../components/TowerEventCard.vue";
 
 export default {
   setup() {
-
-    const filterCategory = ref('')
-
-    const categories = ['concert', 'convention', 'sport', 'digital']
-
+    const filterCategory = ref("");
+    const categories = ["concert", "convention", "sport", "digital"];
     async function getAllEvents() {
       try {
-        await towerEventsService.getAllEvents()
-      } catch (error) {
-        Pop.error(error.message)
-        logger.error(error.message)
+        await towerEventsService.getAllEvents();
+      }
+      catch (error) {
+        Pop.error(error.message);
+        logger.error(error.message);
       }
     }
-    onMounted(() => getAllEvents())
+    onMounted(() => getAllEvents());
     return {
       categories,
-
       account: computed(() => AppState?.account),
-
       towerEvents: computed(() => {
         if (!filterCategory.value) {
-          return AppState.towerEvents
-        } else { return AppState.towerEvents.filter(t => filterCategory == t.type) }
-      })
-    }
-  }
+          return AppState.towerEvents;
+        }
+        else {
+          return AppState.towerEvents.filter(t => t.type == filterCategory.value);
+        }
+      }),
+      changeFilterCategory(category) {
+        filterCategory.value = category
+      }
+    };
+  },
+  components: { TowerEventCard }
 }
 </script>
 

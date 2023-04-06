@@ -10,9 +10,9 @@ export class TowerEvent {
     this.isCanceled = data.isCanceled
     this.location = data.location
     this.name = data.name
-    this.startDate = new Date(data.startDate)
+    this.startDate = new Date(data.startDate).toLocaleDateString()
     this.type = data.type
-    this.updatedAt = new Date(data.updatedAt)
+    this.updatedAt = new Date(data.updatedAt).toLocaleDateString()
   }
 }
 

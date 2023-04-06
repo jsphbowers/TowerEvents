@@ -5,6 +5,16 @@
   <main class="container-fluid">
     <router-view />
   </main>
+
+  <Modal id="towerEventModal">
+    <template #header>
+      <div>Create Event</div>
+    </template>
+
+    <template #towerEventBody>
+      <TowerEventForm />
+    </template>
+  </Modal>
 </template>
 
 <script>
