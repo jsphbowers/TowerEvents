@@ -87,6 +87,7 @@ import { towerEventsService } from "../services/TowerEventsService.js"
 import { computed, onMounted, ref } from "vue"
 import { AppState } from "../AppState.js"
 import { commentsService } from "../services/CommentsService.js"
+import { attendeesService } from "../services/AttendeesService.js"
 import Pop from "../utils/Pop.js"
 import { logger } from "../utils/Logger.js"
 import CommentCard from "../components/CommentCard.vue"
@@ -148,7 +149,7 @@ export default {
 
       async createTicket() {
         try {
-          await towerEventsService.createTicket({ eventId: route.params.eventId })
+          await attendeesService.createTicket({ eventId: route.params.eventId })
         } catch (error) {
           Pop.error(error.message)
           logger.error(error.message)
