@@ -80,6 +80,9 @@
           </form>
         </div>
         <div class="col-11 my-2" v-for="c in comments" :key="c.id">
+          <!-- <h6 class="text-warning">
+            <i class="mdi mdi-ticket"></i>
+          </h6> -->
           <CommentCard :comment="c" />
         </div>
       </section>
