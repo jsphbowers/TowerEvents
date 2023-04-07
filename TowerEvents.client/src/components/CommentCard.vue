@@ -1,10 +1,10 @@
 <template>
   <section class="row p-2">
-    <div class="col-1">
+    <div class="col-md-1 mb-1">
       <img class="profile-pic elevation-2" :src="comment.creator.picture" :alt="comment.creator.name">
     </div>
 
-    <div class="col-9 details-card d-flex align-items-center text-light">
+    <div class="col-10 col-md-9 details-card d-flex align-items-center text-light">
       <div class="justify-content-between">
         <div>
           <h5>{{ comment.creator.name }}</h5>

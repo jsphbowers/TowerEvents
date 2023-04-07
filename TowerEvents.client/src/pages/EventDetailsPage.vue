@@ -5,16 +5,16 @@
       <section class="row details-card m-2 p-1">
         <div class="col-12 p-2">
           <div class="row">
-            <div class="col-5">
+            <div class="col-md-5">
               <img class="img-fluid" :src="towerEvent.coverImg" :alt="towerEvent.name">
             </div>
-            <div class="col-7">
+            <div class="col-md-7">
               <div class="row text-light justify-content-between">
-                <div class="col-4">
+                <div class="col-6 col-md-4">
                   <h3>{{ towerEvent.name }}</h3>
                   <h4>{{ towerEvent.location }}</h4>
                 </div>
-                <div class="col-4 text-end">
+                <div class="col-6 col-md-4 text-end">
                   <h3>{{ towerEvent.startDate }}</h3>
                   <h3>{{ towerEvent.startTime }}</h3>
                 </div>
@@ -25,26 +25,25 @@
                 </div>
               </div>
               <div class="row d-flex justify-content-between my-5"
-                v-if="towerEvent.isCanceled == false && towerEvent.capacity > 0">
-                <div class="col-3">
-                  <h4 class="text-success">Spots Left: {{ towerEvent.capacity }}</h4>
+                v-if="towerEvent.isCanceled == false && towerEvent.capacity >= 0">
+                <div class="col-md-3">
+                  <h4 v-if="towerEvent.capacity > 0" class="text-success">Spots Left: {{ towerEvent.capacity }}</h4>
+                  <h4 v-if="towerEvent.capacity == 0" class="text-danger">Spots Left: {{ towerEvent.capacity }}</h4>
                 </div>
-                <div class="col-3 text-end mx-2">
-                  <button v-if="!hasTicket" @click="createTicket()" :disabled="!account.id" title="Get ticket"
-                    class="btn btn-warning"><i class="mdi mdi-ticket"></i> I'm In!</button>
+                <div class="col-md-3 text-end mr-2 mx-md-2">
+                  <button v-if="!hasTicket" @click="createTicket()" :disabled="!account.id || towerEvent.capacity == 0"
+                    title="Get ticket" class="btn btn-warning"><i class="mdi mdi-ticket"></i> I'm In!</button>
                   <button v-else-if="account.id" @click="removeTicket(hasTicket.attendeeId)" :disabled="!account.id"
                     title="Remove Ticket" class="btn btn-danger"><i class="mdi mdi-ticket"></i> I'm Out!</button>
                 </div>
               </div>
-              <div class="row d-flex justify-content-between my-5"
-                v-if="towerEvent.isCanceled == true || towerEvent.capacity == 0">
+              <div class="row d-flex justify-content-between my-5" v-if="towerEvent.isCanceled == true">
                 <div class="col-3">
                   <h4 class="text-danger">Spots Left: {{ towerEvent.capacity }}</h4>
                 </div>
                 <div class="col-3 text-end">
                   <button @click="createTicket()" disabled title="Get ticket" class="btn btn-danger"><i
-                      class="mdi mdi-ticket"></i> I'm
-                    In!</button>
+                      class="mdi mdi-ticket"></i> I'm In!</button>
                 </div>
               </div>
             </div>
@@ -59,9 +58,10 @@
     <!-- SECTION Attendees -->
     <div class="col-12">
       <section class="row justify-content-center">
-        <div class="col-11 text-light details-card my-3 p-2" v-for="t in ticketHolders">
+        <div class="col-11 text-light details-card my-3 p-2">
           <h6 class="text-success">See Whose Going:</h6>
-          <img class="ticketHolders elevation-2" :title="t.name" :src="t.picture" :alt="t.name">
+          <img v-for="t in ticketHolders" class="ticketHolders elevation-2 mx-1" :title="t.name" :src="t.picture"
+            :alt="t.name">
         </div>
       </section>
     </div>
@@ -91,7 +91,7 @@
 <script>
 import { useRoute } from "vue-router"
 import { towerEventsService } from "../services/TowerEventsService.js"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watchEffect } from "vue"
 import { AppState } from "../AppState.js"
 import { commentsService } from "../services/CommentsService.js"
 import { attendeesService } from "../services/AttendeesService.js"
@@ -134,12 +134,19 @@ export default {
       }
     }
 
-    onMounted(() => {
-      getEventById()
-      getComments()
-      getTicketHolders()
-    }
-    )
+    // onMounted(() => {
+    // }
+    // )
+
+    watchEffect(() => {
+      if (route.params.eventId) {
+        console.log('watch effect runs');
+        getEventById()
+        getComments()
+        getTicketHolders()
+      }
+
+    })
 
     return {
       route,
@@ -209,8 +216,8 @@ export default {
 }
 
 .ticketHolders {
-  height: 8vh;
-  width: 8vh;
+  height: 5vh;
+  width: 5vh;
   border-radius: 50%;
 }
 </style>

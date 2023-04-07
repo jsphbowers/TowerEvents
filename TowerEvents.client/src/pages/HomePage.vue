@@ -3,7 +3,9 @@
     <!-- SECTION Banner Photo with catchphrase -->
     <div class="col-12 border border-primary rounded p-3 bg-photo">
       <section class="row">
-        <h3 class="col-3 mx-5 text-light">Forget ticketmaster. Reserve your seat now with real events for real people.
+        <h3 class="col-md-3 mx-md-5 text-light title-text">Forget ticketmaster. Reserve your seat now with real events for
+          real
+          people.
         </h3>
       </section>
     </div>
@@ -12,8 +14,8 @@
     <div class="col-12 my-4">
       <section class="row">
         <div class="d-flex justify-content-evenly">
-          <button class="btn btn-outline-primary" @click="changeFilterCategory('')">All</button>
-          <button class="btn btn-outline-primary" @click="changeFilterCategory(c)" v-for="c in categories">{{
+          <button class="btn btn-primary" title="All" @click="changeFilterCategory('')">All</button>
+          <button class="btn btn-primary" :title="c" @click="changeFilterCategory(c)" v-for="c in categories">{{
             c.toUpperCase() }}</button>
         </div>
       </section>
@@ -102,4 +104,8 @@ export default {
 }
 
 .text-blur {}
+
+.title-text {
+  text-shadow: 2px 2px 3px black;
+}
 </style>
