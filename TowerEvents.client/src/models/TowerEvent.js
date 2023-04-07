@@ -11,6 +11,7 @@ export class TowerEvent {
     this.location = data.location
     this.name = data.name
     this.startDate = new Date(data.startDate).toLocaleDateString()
+    this.startTime = new Date(data.startDate).toLocaleTimeString()
     this.type = data.type
     this.updatedAt = new Date(data.updatedAt).toLocaleDateString()
   }

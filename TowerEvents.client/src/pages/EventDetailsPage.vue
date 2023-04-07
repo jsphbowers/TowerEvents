@@ -16,6 +16,7 @@
                 </div>
                 <div class="col-4 text-end">
                   <h3>{{ towerEvent.startDate }}</h3>
+                  <h3>{{ towerEvent.startTime }}</h3>
                 </div>
                 <div class="col-12 my-4">
                   <h6>
@@ -28,10 +29,11 @@
                 <div class="col-3">
                   <h4 class="text-success">Spots Left: {{ towerEvent.capacity }}</h4>
                 </div>
-                <div class="col-3 text-end">
-                  <button @click="createTicket()" :disabled="!account.id" title="Get ticket" class="btn btn-warning"><i
-                      class="mdi mdi-ticket"></i> I'm
-                    In!</button>
+                <div class="col-3 text-end mx-2">
+                  <button v-if="!hasTicket" @click="createTicket()" :disabled="!account.id" title="Get ticket"
+                    class="btn btn-warning"><i class="mdi mdi-ticket"></i> I'm In!</button>
+                  <button v-else-if="account.id" @click="removeTicket(hasTicket.attendeeId)" :disabled="!account.id"
+                    title="Get ticket" class="btn btn-danger"><i class="mdi mdi-ticket"></i> I'm Out!</button>
                 </div>
               </div>
               <div class="row d-flex justify-content-between my-5"
@@ -46,6 +48,10 @@
                 </div>
               </div>
             </div>
+            <div class="text-end" v-if="account.id == towerEvent.creatorId">
+              <button @click="cancelEvent()" :disabled="towerEvent.isCanceled" class="btn btn-danger">Cancel
+                Event</button>
+            </div>
           </div>
         </div>
       </section>
@@ -53,14 +59,15 @@
     <!-- SECTION Attendees -->
     <div class="col-12">
       <section class="row justify-content-center">
-        <!-- <div class="col-11" v-for="t in ticketHolders">
-
-        </div> -->
+        <div class="col-11 text-light details-card my-3 p-2" v-for="t in ticketHolders">
+          <h6 class="text-success">See Whose Going:</h6>
+          <img class="ticketHolders elevation-2" :title="t.name" :src="t.picture" :alt="t.name">
+        </div>
       </section>
     </div>
     <!-- SECTION Comments -->
     <div class="col-12">
-      <section class="row justify-content-center">
+      <section class="row justify-content-center" v-if="towerEvent.isCanceled == false">
         <div class="col-11 p-2 details-card my-2" v-if="account.id">
           <form @submit.prevent="createComment()">
             <div class="mb-2 p-2">
@@ -68,7 +75,7 @@
               <textarea v-model="editable.body" class="form-control" id="body" rows="3"></textarea>
             </div>
             <div class="text-end">
-              <button type="submit" class="btn btn-success">Comment</button>
+              <button type="submit" class="btn btn-success m-2">Comment</button>
             </div>
           </form>
         </div>
@@ -117,17 +124,23 @@ export default {
       }
     }
 
-    // async function getTicketHolders() {
-    //   try {
-    //     const eventId = route.params.eventId
-    //   } catch (error) {
-    //     Pop.error(error.message)
-    //     logger.error(error.message)
-    //   }
-    // }
+    async function getTicketHolders() {
+      try {
+        const eventId = route.params.eventId
+        await attendeesService.getTicketHolders(eventId)
+      } catch (error) {
+        Pop.error(error.message)
+        logger.error(error.message)
+      }
+    }
 
-    onMounted(() => getEventById())
-    onMounted(() => getComments())
+    onMounted(() => {
+      getEventById()
+      getComments()
+      getTicketHolders()
+    }
+    )
+
     return {
       route,
       editable,
@@ -135,6 +148,8 @@ export default {
       towerEvent: computed(() => AppState.towerEvent),
       account: computed(() => AppState.account),
       comments: computed(() => AppState.comments),
+      ticketHolders: computed(() => AppState.ticketHolders),
+      hasTicket: computed(() => AppState.ticketHolders.find(t => t.id == AppState.account.id)),
 
       async createComment() {
         try {
@@ -154,6 +169,31 @@ export default {
           Pop.error(error.message)
           logger.error(error.message)
         }
+      },
+
+      async cancelEvent() {
+        try {
+          if (await Pop.confirm('Are you sure you want to cancel this event?')) {
+            await towerEventsService.cancelEvent()
+          }
+        } catch (error) {
+          Pop.error(error.message)
+          logger.error(error)
+        }
+      },
+
+      async removeTicket(attendeeId) {
+        try {
+          if (await Pop.confirm('Are you sure you want to give up your ticket?')) {
+            if (await Pop.confirm('Really? I mean we will lose a ton of money if you do that')) {
+              await attendeesService.removeTicket(attendeeId)
+              Pop.toast('Fine then!', "success")
+            }
+          }
+        } catch (error) {
+          Pop.error(error.message)
+          logger.error(error.message)
+        }
       }
     }
   },
@@ -166,5 +206,11 @@ export default {
 .details-card {
   background-color: #474C61;
   border-radius: .75em;
+}
+
+.ticketHolders {
+  height: 8vh;
+  width: 8vh;
+  border-radius: 50%;
 }
 </style>
