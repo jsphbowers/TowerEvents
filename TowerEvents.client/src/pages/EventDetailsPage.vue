@@ -33,7 +33,7 @@
                   <button v-if="!hasTicket" @click="createTicket()" :disabled="!account.id" title="Get ticket"
                     class="btn btn-warning"><i class="mdi mdi-ticket"></i> I'm In!</button>
                   <button v-else-if="account.id" @click="removeTicket(hasTicket.attendeeId)" :disabled="!account.id"
-                    title="Get ticket" class="btn btn-danger"><i class="mdi mdi-ticket"></i> I'm Out!</button>
+                    title="Remove Ticket" class="btn btn-danger"><i class="mdi mdi-ticket"></i> I'm Out!</button>
                 </div>
               </div>
               <div class="row d-flex justify-content-between my-5"

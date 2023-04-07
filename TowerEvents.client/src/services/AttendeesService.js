@@ -2,6 +2,7 @@ import { AppState } from "../AppState.js";
 import { Attendee } from "../models/Attendee.js";
 import { Ticket } from "../models/TowerEvent.js";
 import { logger } from "../utils/Logger.js";
+import Pop from "../utils/Pop.js";
 import { api } from "./AxiosService.js";
 
 class AttendeesService {
@@ -19,9 +20,14 @@ class AttendeesService {
   }
 
   async getMyTickets() {
-    const res = await api.get(`account/tickets`)
-    logger.log('[GETTING ACCOUNT TICKETS]', res.data)
-    AppState.myTickets = res.data.map(t => new Ticket(t))
+    try {
+      const res = await api.get(`account/tickets`)
+      logger.log('[GETTING ACCOUNT TICKETS]', res.data)
+      AppState.myTickets = res.data.map(t => new Ticket(t))
+    } catch (error) {
+      logger.log('[ERROR]', error)
+      Pop.error(error)
+    }
   }
 
   async removeTicket(attendeeId) {

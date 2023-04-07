@@ -28,7 +28,7 @@ export default {
     onMounted(() => getMyTickets())
     return {
       account: computed(() => AppState.account),
-      myTickets: computed(() => AppState.myTickets)
+      myTickets: computed(() => AppState.myTickets),
     }
   }
 }

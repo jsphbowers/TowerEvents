@@ -19,7 +19,7 @@ export class TowerEvent {
 
 export class Ticket extends TowerEvent {
   constructor(data) {
-    super(data.towerEvent)
+    super(data.event)
     this.ticketId = data.id
   }
 }
